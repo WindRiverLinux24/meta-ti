@@ -17,6 +17,10 @@ BRANCH = "linuxws/scarthgap/k6.6/${PV}"
 
 SRC_URI = "git://git.ti.com/git/graphics/ti-img-rogue-driver.git;protocol=https;branch=${BRANCH}"
 
+SRC_URI += " \
+	file://0001-kbuild-wrap-cc-in-double-quotes.patch \
+"
+
 S = "${WORKDIR}/git"
 
 SRCREV = "e2dfdfee991dadc18175f27fe9e8676e910a2f8d"
@@ -30,7 +34,7 @@ TARGET_PRODUCT:j722s = "j722s_linux"
 PVR_BUILD = "release"
 PVR_WS = "lws-generic"
 
-EXTRA_OEMAKE += 'KERNELDIR="${STAGING_KERNEL_DIR}" BUILD=${PVR_BUILD} PVR_BUILD_DIR=${TARGET_PRODUCT} WINDOW_SYSTEM=${PVR_WS}'
+EXTRA_OEMAKE += 'KERNEL_CC="${KERNEL_CC}" KERNELDIR="${STAGING_KERNEL_DIR}" BUILD=${PVR_BUILD} PVR_BUILD_DIR=${TARGET_PRODUCT} WINDOW_SYSTEM=${PVR_WS}'
 
 do_install() {
     make -C ${STAGING_KERNEL_DIR} M=${B}/binary_${TARGET_PRODUCT}_${PVR_WS}_${PVR_BUILD}/target_aarch64/kbuild INSTALL_MOD_PATH=${D}${root_prefix} PREFIX=${STAGING_DIR_HOST} modules_install
