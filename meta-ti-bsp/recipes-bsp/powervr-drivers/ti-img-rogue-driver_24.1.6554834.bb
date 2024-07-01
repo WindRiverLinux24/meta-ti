@@ -23,7 +23,7 @@ SRC_URI += " \
 
 S = "${WORKDIR}/git"
 
-SRCREV = "e2dfdfee991dadc18175f27fe9e8676e910a2f8d"
+SRCREV = "81e189096ef2f2479ccfb50d8b2fb24097188de3"
 
 TARGET_PRODUCT:j721e = "j721e_linux"
 TARGET_PRODUCT:j721s2 = "j721s2_linux"
