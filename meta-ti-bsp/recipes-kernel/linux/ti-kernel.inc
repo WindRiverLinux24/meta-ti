@@ -12,3 +12,13 @@ EXTRA_DTC_ARGS += "${@get_extra_dtc_args(d)}"
 # the kernel.
 KERNEL_DTBDEST = "${KERNEL_IMAGEDEST}/dtb"
 KERNEL_DTBVENDORED = "1"
+
+KERNEL_PATCHES = ""
+
+KERNEL_PATCHES:bsp-ti-6_6 = " \
+    file://0001-lib-build_OID_registry-fix-reproducibility-issues.patch \
+    file://0001-vt-conmakehash-improve-reproducibility.patch \
+    file://0001-pnmtologo-use-relocatable-file-name.patch \
+"
+
+SRC_URI:append = " ${KERNEL_PATCHES} "
