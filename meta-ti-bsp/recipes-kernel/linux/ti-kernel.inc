@@ -20,10 +20,12 @@ KERNEL_PATCHES:bsp-mainline = " \
     file://0001-drivers-gpu-drm-msm-registers-improve-reproducibilit.patch \
 "
 
+KERNEL_PATCHES:bsp-ti-6_12 = " \
+    file://0001-drivers-gpu-drm-msm-registers-improve-reproducibilit.patch \
+"
+
 KERNEL_PATCHES:bsp-ti-6_6 = " \
-    file://0001-lib-build_OID_registry-fix-reproducibility-issues.patch \
     file://0001-vt-conmakehash-improve-reproducibility.patch \
-    file://0001-pnmtologo-use-relocatable-file-name.patch \
 "
 
 SRC_URI:append = " ${KERNEL_PATCHES} "

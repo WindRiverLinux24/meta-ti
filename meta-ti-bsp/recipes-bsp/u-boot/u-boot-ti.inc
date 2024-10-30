@@ -26,6 +26,9 @@ SRC_URI = "${UBOOT_GIT_URI};protocol=${UBOOT_GIT_PROTOCOL};branch=${BRANCH}"
 
 PV:append = "+git"
 
+# u-boot builds a tool mkeficapsule and it needs this
+DEPENDS += "gnutls-native"
+
 # u-boot needs devtree compiler to parse dts files
 DEPENDS += "dtc-native bc-native flex-native bison-native python3-setuptools-native"
 
@@ -196,12 +199,12 @@ uboot_install:append () {
 }
 
 do_deploy:append:k3r5 () {
-	rm ${DEPLOYDIR}/u-boot-initial-env* || true
-	rm ${DEPLOYDIR}/${PN}-initial-env* || true
-	rm ${DEPLOYDIR}/u-boot-initial-env-${MACHINE}* || true
-	rm ${DEPLOYDIR}/${PN}-initial-env-${MACHINE}* || true
-	rm ${DEPLOYDIR}/u-boot-initial-env-${MACHINE}-${PV}-${PR}* || true
-	rm ${DEPLOYDIR}/${PN}-initial-env-${MACHINE}-${PV}-${PR}* || true
+	rm -f ${DEPLOYDIR}/u-boot-initial-env*
+	rm -f ${DEPLOYDIR}/${PN}-initial-env*
+	rm -f ${DEPLOYDIR}/u-boot-initial-env-${MACHINE}*
+	rm -f ${DEPLOYDIR}/${PN}-initial-env-${MACHINE}*
+	rm -f ${DEPLOYDIR}/u-boot-initial-env-${MACHINE}-${PV}-${PR}*
+	rm -f ${DEPLOYDIR}/${PN}-initial-env-${MACHINE}-${PV}-${PR}*
 }
 
 uboot_deploy_config:append:k3r5 () {
