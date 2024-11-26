@@ -16,6 +16,7 @@ SRC_URI = " \
     file://0001-meson-misdetects-64bit-atomics-on-mips-clang.patch \
     file://0001-gallium-Fix-build-with-llvm-17.patch \
     file://0001-meson-Disable-cmake-dependency-detector-for-llvm.patch \
+    file://0001-gallium-Fix-build-with-llvm-18-and-19.patch \
 "
 
 S = "${WORKDIR}/git"
@@ -25,7 +26,7 @@ PACKAGECONFIG:append = " \
     ${@bb.utils.contains('PREFERRED_PROVIDER_virtual/gpudriver', 'ti-sgx-ddk-km', 'sgx', '', d)} \
 "
 
-SRCREV = "b12290126ba6a154f0e8b0a8c8b2b0d64f98e427"
+SRCREV = "0e75e7ded360ea6aee4140393b30960e152f3994"
 PV = "23.2.1"
 
 PVR_DISPLAY_CONTROLLER_ALIAS ??= "tidss"
