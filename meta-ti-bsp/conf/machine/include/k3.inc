@@ -3,7 +3,8 @@
 require conf/machine/include/ti-soc.inc
 SOC_FAMILY:append = ":k3"
 
-require conf/machine/include/arm/arch-arm64.inc
+DEFAULTTUNE ?= "aarch64"
+require conf/machine/include/arm/armv8a/tune-cortexa72-cortexa53.inc
 
 require conf/machine/include/ti-bsp.inc
 
@@ -53,6 +54,8 @@ EFI_PROVIDER ?= "grub-efi"
 MACHINE_FEATURES += "efi"
 
 WKS_FILE ?= "${@bb.utils.contains("MACHINE_FEATURES", "efi", "sdimage-2part-efi.wks.in", "sdimage-2part.wks", d)}"
+
+TI_WKS_BOOTLOADER_APPEND ?= ""
 
 do_image_wic[depends] += "virtual/bootloader:do_deploy"
 

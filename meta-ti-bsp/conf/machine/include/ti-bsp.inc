@@ -4,7 +4,7 @@
 # well as a dedicated machine override.
 
 # Supported options are: mainline, next, ti-6_12, ti-6_6, ti-6_1
-TI_PREFERRED_BSP ??= "ti-6_6"
+TI_PREFERRED_BSP ??= "ti-6_12"
 
 # Use bsp-* namespace for overrides
 MACHINEOVERRIDES =. "bsp-${TI_PREFERRED_BSP}:"
@@ -22,6 +22,9 @@ BSP_BOOTLOADER_VERSION:bsp-mainline = "%"
 # in mainline, usually present in TI staging or derivative like BB.org
 MACHINE_FEATURES:remove:bsp-mainline = "gpu"
 
+# GC320 support requires out-of-tree drivers not available in mainline
+MACHINE_FEATURES:remove:bsp-mainline = "gc320"
+
 # ==========
 # next
 # upcoming upstream/mainline kernel, u-boot
@@ -35,18 +38,28 @@ BSP_BOOTLOADER_VERSION:bsp-next = "%"
 # in next, usually present in TI staging or derivative like BB.org
 MACHINE_FEATURES:remove:bsp-next = "gpu"
 
+# GC320 support requires out-of-tree drivers not available in next
+MACHINE_FEATURES:remove:bsp-next = "gc320"
+
 # ==========
 # ti-6_12
-# TI staging kernel 6.12, u-boot 2024.10
+# TI staging kernel 6.12, u-boot 2025.01
 # ==========
 BSP_KERNEL_PROVIDER:bsp-ti-6_12 = "linux-ti-staging"
 BSP_KERNEL_VERSION:bsp-ti-6_12 = "6.12%"
 BSP_BOOTLOADER_PROVIDER:bsp-ti-6_12 = "u-boot-ti-staging"
-BSP_BOOTLOADER_VERSION:bsp-ti-6_12 = "2024.10%"
+BSP_BOOTLOADER_VERSION:bsp-ti-6_12 = "2025.01%"
 
-# GPU support requires out-of-tree SGX and Rogue drivers not available
-# in 6.12 yet
-MACHINE_FEATURES:remove:bsp-ti-6_12 = "gpu"
+BSP_SGX_DRIVER_PROVIDER:bsp-ti-6_12 = "ti-sgx-ddk-km"
+BSP_SGX_DRIVER_VERSION:bsp-ti-6_12 = "1.17%"
+BSP_SGX_UMLIBS_VERSION:bsp-ti-6_12 = "1.17%"
+BSP_ROGUE_DRIVER_PROVIDER:bsp-ti-6_12 = "ti-img-rogue-driver"
+BSP_ROGUE_DRIVER_VERSION:bsp-ti-6_12 = "24%"
+BSP_ROGUE_UMLIBS_VERSION:bsp-ti-6_12 = "24%"
+BSP_MESA_PVR_VERSION:bsp-ti-6_12 = "24%"
+
+# GC320 support requires out-of-tree drivers not yet available in 6.12
+MACHINE_FEATURES:remove:bsp-ti-6_12 = "gc320"
 
 # ==========
 # ti-6_6
@@ -63,7 +76,10 @@ BSP_SGX_UMLIBS_VERSION:bsp-ti-6_6 = "1.17%"
 BSP_ROGUE_DRIVER_PROVIDER:bsp-ti-6_6 = "ti-img-rogue-driver"
 BSP_ROGUE_DRIVER_VERSION:bsp-ti-6_6 = "24%"
 BSP_ROGUE_UMLIBS_VERSION:bsp-ti-6_6 = "24%"
-BSP_MESA_PVR_VERSION:bsp-ti-6_6 = "23%"
+BSP_MESA_PVR_VERSION:bsp-ti-6_6 = "24%"
+
+# GC320 support requires out-of-tree drivers not yet available in 6.6
+MACHINE_FEATURES:remove:bsp-ti-6_6 = "gc320"
 
 # ==========
 # ti-6_1
@@ -81,6 +97,9 @@ BSP_ROGUE_DRIVER_PROVIDER:bsp-ti-6_1 = "ti-img-rogue-driver"
 BSP_ROGUE_DRIVER_VERSION:bsp-ti-6_1 = "23%"
 BSP_ROGUE_UMLIBS_VERSION:bsp-ti-6_1 = "23%"
 BSP_MESA_PVR_VERSION:bsp-ti-6_1 = "22%"
+
+# GC320 support requires out-of-tree drivers not yet available in 6.1
+MACHINE_FEATURES:remove:bsp-ti-6_1 = "gc320"
 
 # ==========
 # sane fallback defaults
@@ -106,7 +125,6 @@ BSP_MESA_PVR_VERSION ?= ""
 PREFERRED_PROVIDER_virtual/kernel ?= "${BSP_KERNEL_PROVIDER}"
 PREFERRED_VERSION_${BSP_KERNEL_PROVIDER} ?= "${BSP_KERNEL_VERSION}"
 PREFERRED_VERSION_${BSP_KERNEL_PROVIDER}-rt ?= "${BSP_KERNEL_VERSION}"
-PREFERRED_VERSION_${BSP_KERNEL_PROVIDER}-systest ?= "${BSP_KERNEL_VERSION}"
 PREFERRED_PROVIDER_virtual/bootloader ?= "${BSP_BOOTLOADER_PROVIDER}"
 PREFERRED_PROVIDER_u-boot ?= "${BSP_BOOTLOADER_PROVIDER}"
 PREFERRED_VERSION_${BSP_BOOTLOADER_PROVIDER} ?= "${BSP_BOOTLOADER_VERSION}"
