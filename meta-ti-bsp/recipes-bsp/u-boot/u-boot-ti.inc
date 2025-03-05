@@ -25,6 +25,9 @@ UBOOT_GIT_PROTOCOL ?= "https"
 UBOOT_GIT_BRANCH ?= "branch=${BRANCH}"
 SRC_URI = "${UBOOT_GIT_URI};protocol=${UBOOT_GIT_PROTOCOL};${UBOOT_GIT_BRANCH}"
 
+FILESEXTRAPATHS:prepend := "${COREBASE}/meta/recipes-bsp/u-boot/files:"
+SRC_URI += "file://CVE-2024-57254.patch \
+"
 PV:append = "+git"
 
 # u-boot builds a tool mkeficapsule and it needs this
