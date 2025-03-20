@@ -23,8 +23,8 @@ S = "${WORKDIR}/git"
 
 BRANCH ?= "ti-linux-6.12.y"
 
-SRCREV ?= "5657fc069e8b33255b027a2416b51133a98df939"
-PV = "6.12.13+git"
+SRCREV ?= "8c8cc002ab65149491f9b75cadfaeb2342150800"
+PV = "6.12.17+git"
 
 # Special configuration for remoteproc/rpmsg IPC modules
 module_conf_rpmsg_client_sample = "blacklist rpmsg_client_sample"
