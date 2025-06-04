@@ -7,8 +7,6 @@ COMPATIBLE_MACHINE = "k3"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-INHIBIT_DEFAULT_DEPS = "1"
-
 inherit update-alternatives
 
 PLAT_SFX = ""
@@ -22,6 +20,7 @@ PLAT_SFX:am65xx = "am65xx"
 PLAT_SFX:am64xx = "am64xx"
 PLAT_SFX:am62xx = "am62xx"
 PLAT_SFX:am62axx = "am62axx"
+PLAT_SFX:am62dxx = "am62axx"
 PLAT_SFX:am62pxx = "am62pxx"
 
 FILESEXTRAPATHS:prepend := "${METATIBASE}/recipes-bsp/ti-sci-fw/files/:"
@@ -37,20 +36,21 @@ IPC_FW_DIR = "ti-ipc/${PLAT_SFX}"
 
 INSTALL_IPC_FW_DIR = "${nonarch_base_libdir}/firmware/${IPC_FW_DIR}"
 
-MCU_1_0_FW = "ipc_echo_test_mcu1_0_release_strip.xer5f"
-MCU_1_1_FW = "ipc_echo_test_mcu1_1_release_strip.xer5f"
-MCU_2_0_FW = "ipc_echo_test_mcu2_0_release_strip.xer5f"
-MCU_2_1_FW = "ipc_echo_test_mcu2_1_release_strip.xer5f"
-MCU_3_0_FW = "ipc_echo_test_mcu3_0_release_strip.xer5f"
-MCU_3_1_FW = "ipc_echo_test_mcu3_1_release_strip.xer5f"
-MCU_4_0_FW = "ipc_echo_test_mcu4_0_release_strip.xer5f"
-MCU_4_1_FW = "ipc_echo_test_mcu4_1_release_strip.xer5f"
-C66_1_FW   = "ipc_echo_test_c66xdsp_1_release_strip.xe66"
-C66_2_FW   = "ipc_echo_test_c66xdsp_2_release_strip.xe66"
-C7X_1_FW   = "ipc_echo_test_c7x_1_release_strip.xe71"
-C7X_2_FW   = "ipc_echo_test_c7x_2_release_strip.xe71"
-C7X_3_FW   = "ipc_echo_test_c7x_3_release_strip.xe71"
-C7X_4_FW   = "ipc_echo_test_c7x_4_release_strip.xe71"
+MCU_1_0_FW =       "ipc_echo_test_mcu1_0_release_strip.xer5f"
+MCU_1_1_FW =       "ipc_echo_test_mcu1_1_release_strip.xer5f"
+MCU_2_0_FW =       "ipc_echo_test_mcu2_0_release_strip.xer5f"
+MCU_2_1_FW =       "ipc_echo_test_mcu2_1_release_strip.xer5f"
+MCU_3_0_FW =       "ipc_echo_test_mcu3_0_release_strip.xer5f"
+MCU_3_1_FW =       "ipc_echo_test_mcu3_1_release_strip.xer5f"
+MCU_4_0_FW =       "ipc_echo_test_mcu4_0_release_strip.xer5f"
+MCU_4_1_FW =       "ipc_echo_test_mcu4_1_release_strip.xer5f"
+C66_1_FW =         "ipc_echo_test_c66xdsp_1_release_strip.xe66"
+C66_2_FW =         "ipc_echo_test_c66xdsp_2_release_strip.xe66"
+C7X_1_FW =         "ipc_echo_test_c7x_1_release_strip.xe71"
+C7X_1_FW:am62axx = "dsp_edgeai_c7x_1_release_strip.out"
+C7X_2_FW =         "ipc_echo_test_c7x_2_release_strip.xe71"
+C7X_3_FW =         "ipc_echo_test_c7x_3_release_strip.xe71"
+C7X_4_FW =         "ipc_echo_test_c7x_4_release_strip.xe71"
 
 IPC_FW_LIST = ""
 IPC_FW_LIST:am65xx =  "${MCU_1_0_FW} ${MCU_1_1_FW}"
@@ -58,6 +58,7 @@ IPC_FW_LIST:am64xx =  "${MCU_1_0_FW} ${MCU_1_1_FW} ${MCU_2_0_FW} ${MCU_2_1_FW} $
 IPC_FW_LIST:am62xx =  "                            ${MCU_2_0_FW}"
 IPC_FW_LIST:am62pxx = "                            ${MCU_2_0_FW}"
 IPC_FW_LIST:am62axx = "                            ${MCU_2_0_FW}                                                                                               ${C7X_1_FW}"
+IPC_FW_LIST:am62dxx = "                            ${MCU_2_0_FW}                                                                                               ${C7X_1_FW}"
 IPC_FW_LIST:j721e =   "              ${MCU_1_1_FW} ${MCU_2_0_FW} ${MCU_2_1_FW} ${MCU_3_0_FW} ${MCU_3_1_FW}                             ${C66_1_FW} ${C66_2_FW} ${C7X_1_FW}"
 IPC_FW_LIST:j7200 =   "              ${MCU_1_1_FW} ${MCU_2_0_FW} ${MCU_2_1_FW}"
 IPC_FW_LIST:j721s2 =  "              ${MCU_1_1_FW} ${MCU_2_0_FW} ${MCU_2_1_FW} ${MCU_3_0_FW} ${MCU_3_1_FW}                                                     ${C7X_1_FW} ${C7X_2_FW}"
@@ -92,6 +93,13 @@ do_install:prepend:am62pxx() {
 
 # Update the am62axx ipc binaries to be consistent with other platforms
 do_install:prepend:am62axx() {
+        ( cd ${S}/${IPC_FW_DIR}; \
+                ln -sf am62a-mcu-r5f0_0-fw ${MCU_2_0_FW}; \
+        )
+}
+
+# Update the am62dxx ipc binaries to be consistent with other platforms
+do_install:prepend:am62dxx() {
         ( cd ${S}/${IPC_FW_DIR}; \
                 ln -sf am62a-mcu-r5f0_0-fw ${MCU_2_0_FW}; \
         )
@@ -136,6 +144,11 @@ ALTERNATIVE:${PN}:am62pxx = "\
                     "
 
 ALTERNATIVE:${PN}:am62axx = "\
+                    am62a-mcu-r5f0_0-fw   am62a-mcu-r5f0_0-fw-sec \
+                    am62a-c71_0-fw        am62a-c71_0-fw-sec \
+                    "
+
+ALTERNATIVE:${PN}:am62dxx = "\
                     am62a-mcu-r5f0_0-fw   am62a-mcu-r5f0_0-fw-sec \
                     am62a-c71_0-fw        am62a-c71_0-fw-sec \
                     "

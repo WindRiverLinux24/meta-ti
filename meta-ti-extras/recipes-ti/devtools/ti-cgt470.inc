@@ -1,4 +1,4 @@
-DESCRIPTION = "TI ARM Code Generation Tools"
+SUMMARY = "TI ARM Code Generation Tools"
 HOMEPAGE = "https://www-a.ti.com/downloads/sds_support/CodeGenerationTools.htm"
 SECTION = "devel"
 LICENSE = "TI"
@@ -13,9 +13,9 @@ S = "${WORKDIR}/cgt470_${PV}"
 
 SRC_URI = "http://install.source.dir.local/ti_cgt_tms470_${PVwithdots}_setup_linux_x86.bin;name=cgt470bin"
 
-BINFILE="ti_cgt_tms470_${PVwithdots}_setup_linux_x86.bin"
-TI_BIN_UNPK_CMDS="Y:qY:workdir: : "
-TI_BIN_UNPK_WDEXT="/cgt470_${PV}"
+BINFILE = "ti_cgt_tms470_${PVwithdots}_setup_linux_x86.bin"
+TI_BIN_UNPK_CMDS = "Y:qY:workdir: : "
+TI_BIN_UNPK_WDEXT = "/cgt470_${PV}"
 
 do_install() {
     install -d ${D}${CODEGEN_ARM_INSTALL_DIR_RECIPE}

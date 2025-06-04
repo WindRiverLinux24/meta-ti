@@ -1,4 +1,4 @@
-DESCRIPTION = "Cortex-M3 binary blob for suspend-resume"
+SUMMARY = "Cortex-M3 binary blob for suspend-resume"
 
 LICENSE = "TI-TSPA"
 LIC_FILES_CHKSUM = "file://License.txt;md5=7bdc54a749ab7a7dea999d25d99a41b8"
@@ -14,7 +14,7 @@ SRC_URI = "git://git.ti.com/git/processor-firmware/ti-amx3-cm3-pm-firmware.git;p
 S = "${WORKDIR}/git"
 
 do_compile() {
-	make CROSS_COMPILE="${TARGET_PREFIX}" CC="${TARGET_PREFIX}gcc ${TOOLCHAIN_OPTIONS} ${SECURITY_NOPIE_CFLAGS} ${DEBUG_PREFIX_MAP}"
+	make CROSS_COMPILE="${TARGET_PREFIX}" CC="${TARGET_PREFIX}gcc -std=gnu11 ${TOOLCHAIN_OPTIONS} ${SECURITY_NOPIE_CFLAGS} ${DEBUG_PREFIX_MAP}"
 }
 
 do_install() {

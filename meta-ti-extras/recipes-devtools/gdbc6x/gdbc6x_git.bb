@@ -1,4 +1,4 @@
-DESCRIPTION = "GNU debugger for TI C6X DSP."
+SUMMARY = "GNU debugger for TI C6X DSP."
 SECTION = "devel"
 LICENSE = "GPL-3.0-or-later"
 LIC_FILES_CHKSUM = "file://debian/copyright;md5=bf0fe2872eb3dfeebb2cbe38206fe81f"
@@ -19,7 +19,7 @@ S = "${WORKDIR}/git/gdbc6x"
 inherit update-rc.d
 inherit gettext
 
-CFLAGS += "-fcommon"
+CFLAGS += "-fcommon -std=gnu11"
 
 do_configure () {
     cd ${S}

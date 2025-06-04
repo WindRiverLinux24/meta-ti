@@ -14,6 +14,8 @@ require u-boot-mergeconfig.inc
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/u-boot:"
 
+FILES:${PN}-falcon = "boot/tispl_falcon.bin"
+
 SUMMARY = "u-boot bootloader for TI devices"
 
 LICENSE = "GPL-2.0-or-later"
@@ -50,7 +52,13 @@ DEPENDS += "python3-pyelftools-native python3-pyyaml-native python3-jsonschema-n
 DEPENDS:append:k3 = " ti-sci-fw"
 DEPENDS:append:k3r5 = " ti-sci-fw"
 
+# HSM Demo Firmware is only applicable for J721S2 & J784S4 devices
+DEPENDS:append:j721s2 = " ti-hsm-demo-fw"
+DEPENDS:append:j784s4 = " ti-hsm-demo-fw"
+
 DM_FIRMWARE = "ipc_echo_testb_mcu1_0_release_strip.xer5f"
+DM_FIRMWARE:am62axx = "dm_edgeai_mcu1_0_release_strip.out"
+DM_FIRMWARE:am62pxx = "${@oe.utils.conditional('DISPLAY_CLUSTER_ENABLE', '1', 'dss_display_share.wkup-r5f0_0.release.strip.out', 'ipc_echo_testb_mcu1_0_release_strip.xer5f', d)}"
 
 PLAT_SFX = ""
 PLAT_SFX:j721e = "j721e"
@@ -63,13 +71,14 @@ PLAT_SFX:am65xx = "am65xx"
 PLAT_SFX:am64xx = "am64xx"
 PLAT_SFX:am62xx = "am62xx"
 PLAT_SFX:am62axx = "am62axx"
+PLAT_SFX:am62dxx = "am62axx"
 PLAT_SFX:am62lxx = "am62lxx"
 PLAT_SFX:am62pxx = "am62pxx"
 
 PACKAGECONFIG[ap-trusted-rom] = "BL1=${STAGING_DIR_HOST}/firmware/bl1.bin,,trusted-firmware-a"
 PACKAGECONFIG[atf] = "BL31=${STAGING_DIR_HOST}/firmware/bl31.bin,,trusted-firmware-a"
 PACKAGECONFIG[optee] = "TEE=${STAGING_DIR_HOST}${nonarch_base_libdir}/firmware/bl32.bin,,optee-os"
-PACKAGECONFIG[dm] = "DM=${STAGING_DIR_HOST}${nonarch_base_libdir}/firmware/ti-dm/${PLAT_SFX}/${DM_FIRMWARE},,ti-dm-fw"
+PACKAGECONFIG[dm] = "TI_DM=${STAGING_DIR_HOST}${nonarch_base_libdir}/firmware/ti-dm/${PLAT_SFX}/${DM_FIRMWARE},,ti-dm-fw"
 
 PACKAGECONFIG:append:aarch64 = " atf optee"
 PACKAGECONFIG:append:j721e = " dm"
@@ -80,12 +89,13 @@ PACKAGECONFIG:append:j722s = " dm"
 PACKAGECONFIG:append:j742s2 = " dm"
 PACKAGECONFIG:append:am62xx = " dm"
 PACKAGECONFIG:append:am62axx = " dm"
+PACKAGECONFIG:append:am62dxx = " dm"
 PACKAGECONFIG:append:am62lxx = " ap-trusted-rom"
 PACKAGECONFIG:append:am62pxx = " dm"
 
 COMPATIBLE_MACHINE = "(ti-soc)"
 
-BINMAN_INDIRS="${STAGING_DIR_HOST}${nonarch_base_libdir}/firmware"
+BINMAN_INDIRS = "${STAGING_DIR_HOST}${nonarch_base_libdir}/firmware"
 
 EXTRA_OEMAKE += "${PACKAGECONFIG_CONFARGS} BINMAN_INDIRS=${BINMAN_INDIRS}"
 
@@ -363,24 +373,26 @@ uboot_deploy:append () {
     fi
 }
 
-do_install:append:am62xx() {
-	install -d ${D}/boot
-	install -m 0644 ${S}/tools/logos/ti_logo_414x97_32bpp.bmp.gz ${D}/boot
-}
-
 do_deploy:append:am62xx() {
 	install -d ${DEPLOYDIR}
 	install -m 0644 ${S}/tools/logos/ti_logo_414x97_32bpp.bmp.gz ${DEPLOYDIR}
-}
-
-do_install:append:am62pxx() {
-	install -d ${D}/boot
-	install -m 0644 ${S}/tools/logos/ti_logo_414x97_32bpp.bmp.gz ${D}/boot
 }
 
 do_deploy:append:am62pxx() {
 	install -d ${DEPLOYDIR}
 	install -m 0644 ${S}/tools/logos/ti_logo_414x97_32bpp.bmp.gz ${DEPLOYDIR}
 }
+
+do_install:append:ti-falcon() {
+	install -m 0644 ${B}/tispl_falcon.bin ${D}/boot
+}
+
+FALCON_PKG = ""
+FALCON_PKG:ti-falcon = "${PN}-falcon "
+
+PACKAGES:prepend:am62xx-evm = "${FALCON_PKG} "
+PACKAGES:prepend:am62axx-evm = "${FALCON_PKG} "
+PACKAGES:prepend:am62pxx-evm = "${FALCON_PKG} "
+PACKAGES:prepend:am62xx-lp-evm = "${FALCON_PKG} "
 
 TOOLCHAIN = "gcc"
